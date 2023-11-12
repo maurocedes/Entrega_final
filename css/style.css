@@ -57,6 +57,24 @@ nav {
     gap: 10px;
 }
 
+.card-carrito {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-carrito img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.card-body-carrito {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 main div {
     display: flex;
     flex-wrap: wrap;
