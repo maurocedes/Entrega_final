@@ -1,30 +1,16 @@
-const productos = [
-    {
-        id: 'television',
-        product: 'TV LED 50"',
-        thumbnail: './images/tv-led-50.webp',
-        price: '629',
-    },
-    {
-        id: 'equipo-audio',
-        product: 'Equipo de Audio 5,1 Subwoofer, Bluetooth, USB, FM/AM',
-        thumbnail: './images/equipo-de-audio.webp',
-        price: '149',
-    },
-    {
-        id: 'camara-fotos',
-        product: 'Cámara de Foto FZ300 + lente 18-55mm',
-        thumbnail: './images/camara-de-fotos.webp',
-        price: '582',
-    },
-    {
-        id: 'playstation',
-        product: 'PlayStation 5 825Gb Standard color blanco y negro',
-        thumbnail: './images/playstation-5.webp',
-        price: '839',
-    },
-];
 
+const productos = () => {
+    console.log('buscar productos')
+    // fetch from the products.json file inside the data folder: relative path: js\data\products.json
+    return fetch('js/data/products.json')
+        .then(response => response.json())
+        .then(data => {
+            // console.log(data);
+            addCardsToDOM(data);
+            return data;
+        });
+};
+productos()
 const form = document.querySelector('#form');
 const formContainer = document.querySelector('.form-container-inputs');
 const mainElement = document.querySelector('main');
@@ -64,15 +50,22 @@ let cards = document.createElement('div');
 let carrito = [];
 let totalPrecio = 0; // Variable para almacenar el precio total
 
-for (const articuloVenta of productos) {
-    cards.innerHTML += ` <article class="card" id="${articuloVenta.id}">
-                            <img src="${articuloVenta.thumbnail}" alt="">
-                            <div class="card-body">
-                                <p>${articuloVenta.product}</p>
-                                <p>U$S ${articuloVenta.price}</p>
-                            </div>
-                            <button onclick="agregarAlCarrito('${articuloVenta.id}')">Agregar al carrito</button>
-                        </article>`;
+
+function addCardsToDOM(data) {
+    console.log(data);
+    data.forEach((articuloVenta) => {
+        console.log(articuloVenta);
+        cards.innerHTML += ` 
+        <article class="card" id="${articuloVenta.id}">
+            <img src="${articuloVenta.thumbnail}" alt="">
+            <div class="card-body">
+                <p>${articuloVenta.product}</p>
+                <p>U$S ${articuloVenta.price}</p>
+            </div>
+            <button onclick="agregarAlCarrito('${articuloVenta.id}')">Agregar al carrito</button>
+        </article>
+        `;
+    });
 }
 
 mainElement.appendChild(cards);
@@ -94,19 +87,24 @@ function borrarDelCarrito(index) {
 
 function agregarAlCarrito(id) {
     console.log('agregarAlCarrito triggered');
-    const productoAgregado = productos.find((articuloVenta) => articuloVenta.id === id);
-    let carritoLocalStorage = JSON.parse(localStorage.getItem('carrito')) || [];
+    productos().then(productos => {
+        const productoAgregado = productos.find((articuloVenta) => articuloVenta.id === id);
+        // const productoAgregado = productos.filter(function (producto) { return producto.id === id })
+        let carritoLocalStorage = JSON.parse(localStorage.getItem('carrito')) || [];
 
-    if (productoAgregado) {
-        carritoLocalStorage.push(productoAgregado);
+        if (productoAgregado) {
+            carritoLocalStorage.push(productoAgregado);
 
-        // Suma el precio del producto al precio total
-        totalPrecio += parseFloat(productoAgregado.price);
+            // Suma el precio del producto al precio total
+            totalPrecio += parseFloat(productoAgregado.price);
 
-        localStorage.setItem('carrito', JSON.stringify(carritoLocalStorage));
-        mostrarCarrito();
-        actualizarPrecioTotal();
-    }
+            localStorage.setItem('carrito', JSON.stringify(carritoLocalStorage));
+            mostrarCarrito();
+            actualizarPrecioTotal();
+        }
+
+    })
+
 }
 
 
@@ -116,7 +114,7 @@ function mostrarCarrito() {
     const carritoLocalStorage = JSON.parse(localStorage.getItem('carrito')) || [];
 
     carritoHTML.innerHTML = ''; // Limpiar el contenido existente antes de mostrar los nuevos elementos
-    
+
     carritoLocalStorage.forEach((item, index) => {
         carritoHTML.innerHTML += `
             <article class="card-carrito" id="${item.id}">
@@ -136,7 +134,7 @@ function mostrarCarrito() {
 
 function actualizarPrecioTotal() {
     const precioTotalElement = document.querySelector('#precio-total');
-    if(precioTotalElement){
+    if (precioTotalElement) {
         precioTotalElement.textContent = `Total: U$S ${totalPrecio.toFixed(2)}`;
     }
 }
@@ -144,3 +142,5 @@ function actualizarPrecioTotal() {
 
 // Mostrar el carrito al cargar la página
 mostrarCarrito();
+
+

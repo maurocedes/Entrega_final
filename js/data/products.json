@@ -1,0 +1,26 @@
+[
+    {
+        "id": "television",
+        "product": "TV LED 50\"",
+        "thumbnail": "./images/tv-led-50.webp",
+        "price": "629"
+    },
+    {
+        "id": "equipo-audio",
+        "product": "Equipo de Audio 5,1 Subwoofer, Bluetooth, USB, FM/AM",
+        "thumbnail": "./images/equipo-de-audio.webp",
+        "price": "149"
+    },
+    {
+        "id": "camara-fotos",
+        "product": "Cámara de Foto FZ300 + lente 18-55mm",
+        "thumbnail": "./images/camara-de-fotos.webp",
+        "price": "582"
+    },
+    {
+        "id": "playstation",
+        "product": "PlayStation 5 825Gb Standard color blanco y negro",
+        "thumbnail": "./images/playstation-5.webp",
+        "price": "839"
+    }
+]
